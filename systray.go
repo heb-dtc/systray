@@ -140,7 +140,7 @@ func AddSeparator() {
 	addSeparator(atomic.AddUint32(&currentID, 1))
 }
 
-func (menuItem *MenuItem) ResetMenuItem() {
+func (menuItem *MenuItem) RemoveSubMenuItems() {
 	resetMenuItem(menuItem)
 	menuItemsLock.Lock()
     for _, item := range menuItems {

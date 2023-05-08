@@ -207,7 +207,9 @@ gboolean do_reset_menu_item(gpointer data) {
 		MenuItemNode* item = (MenuItemNode*)(it->data);
 		if(item->menu_id == mii->menu_id){
             GtkWidget* subMenu = gtk_menu_item_get_submenu(GTK_MENU_ITEM(item->menu_item));
-            gtk_container_remove(GTK_CONTAINER(global_tray_menu), subMenu);
+            if (subMenu != NULL) {
+                gtk_container_remove(GTK_CONTAINER(global_tray_menu), subMenu);
+            }
 			break;
 		}
 	}
