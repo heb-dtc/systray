@@ -143,11 +143,11 @@ func AddSeparator() {
 func (menuItem *MenuItem) RemoveSubMenuItems() {
 	resetMenuItem(menuItem)
 	menuItemsLock.Lock()
-    for _, item := range menuItems {
-       if (item.parent.id == menuItem.id) {
-	        delete(menuItems, item.id)
-       }
-    }
+	for _, item := range menuItems {
+		if item.parent != nil && item.parent.id == menuItem.id {
+			delete(menuItems, item.id)
+		}
+	}
 	menuItemsLock.Unlock()
 }
 
