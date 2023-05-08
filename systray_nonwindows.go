@@ -1,4 +1,6 @@
+//go:build !windows
 // +build !windows
+
 // go:build !windows
 
 package systray
@@ -86,7 +88,13 @@ func showMenuItem(item *MenuItem) {
 }
 
 func resetMenu() {
-    C.reset_menu()
+	C.reset_menu()
+}
+
+func resetMenuItem(item *MenuItem) {
+    C.reset_menu_item(
+        C.int(item.id),
+    )
 }
 
 //export systray_ready

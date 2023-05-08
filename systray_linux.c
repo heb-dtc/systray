@@ -199,6 +199,22 @@ gboolean do_hide_menu_item(gpointer data) {
 	return FALSE;
 }
 
+// runs in main thread, should always return FALSE to prevent gtk to execute it again
+gboolean do_reset_menu_item(gpointer data) {
+	MenuItemInfo *mii = (MenuItemInfo*)data;
+	GList* it;
+	for(it = global_menu_items; it != NULL; it = it->next) {
+		MenuItemNode* item = (MenuItemNode*)(it->data);
+		if(item->menu_id == mii->menu_id){
+            GtkWidget* subMenu = gtk_menu_item_get_submenu(GTK_MENU_ITEM(item->menu_item));
+            gtk_container_remove(GTK_CONTAINER(global_tray_menu), subMenu);
+			break;
+		}
+	}
+	return FALSE;
+}
+
+// runs in main thread, should always return FALSE to prevent gtk to execute it again
 gboolean do_reset_menu(gpointer data) {
 	global_tray_menu = gtk_menu_new();
 	app_indicator_set_menu(global_app_indicator, GTK_MENU(global_tray_menu));
@@ -278,6 +294,12 @@ void show_menu_item(int menu_id) {
 
 void reset_menu() {
     g_idle_add(do_reset_menu, NULL);
+}
+
+void reset_menu_item(int menu_id) {
+	MenuItemInfo *mii = malloc(sizeof(MenuItemInfo));
+	mii->menu_id = menu_id;
+	g_idle_add(do_reset_menu_item, mii);
 }
 
 void quit() {

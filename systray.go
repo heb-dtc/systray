@@ -107,7 +107,7 @@ func Register(onReady func(), onExit func()) {
 }
 
 func Reset() {
-    resetMenu()
+	resetMenu()
 }
 
 // Quit the systray
@@ -138,6 +138,17 @@ func AddMenuItemCheckbox(title string, tooltip string, checked bool) *MenuItem {
 // AddSeparator adds a separator bar to the menu
 func AddSeparator() {
 	addSeparator(atomic.AddUint32(&currentID, 1))
+}
+
+func (menuItem *MenuItem) ResetMenuItem() {
+	resetMenuItem(menuItem)
+	menuItemsLock.Lock()
+    for _, item := range menuItems {
+       if (item.parent.id == menuItem.id) {
+	        delete(menuItems, item.id)
+       }
+    }
+	menuItemsLock.Unlock()
 }
 
 // AddSubMenuItem adds a nested sub-menu item with the designated title and tooltip.
