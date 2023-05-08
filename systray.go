@@ -106,6 +106,10 @@ func Register(onReady func(), onExit func()) {
 	registerSystray()
 }
 
+func Reset() {
+    resetMenu()
+}
+
 // Quit the systray
 func Quit() {
 	quitOnce.Do(quit)

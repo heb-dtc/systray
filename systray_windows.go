@@ -616,6 +616,10 @@ func (t *winTray) addSeparatorMenuItem(menuItemId, parentId uint32) error {
 	return nil
 }
 
+func resetMenu() {
+	wt.createMenu()
+}
+
 func (t *winTray) hideMenuItem(menuItemId, parentId uint32) error {
 	// https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-removemenu
 	const MF_BYCOMMAND = 0x00000000

@@ -199,6 +199,12 @@ gboolean do_hide_menu_item(gpointer data) {
 	return FALSE;
 }
 
+gboolean do_reset_menu(gpointer data) {
+	global_tray_menu = gtk_menu_new();
+	app_indicator_set_menu(global_app_indicator, GTK_MENU(global_tray_menu));
+	return FALSE;
+}
+
 // runs in main thread, should always return FALSE to prevent gtk to execute it again
 gboolean do_show_menu_item(gpointer data) {
 	MenuItemInfo *mii = (MenuItemInfo*)data;
@@ -268,6 +274,10 @@ void show_menu_item(int menu_id) {
 	MenuItemInfo *mii = malloc(sizeof(MenuItemInfo));
 	mii->menu_id = menu_id;
 	g_idle_add(do_show_menu_item, mii);
+}
+
+void reset_menu() {
+    g_idle_add(do_reset_menu, NULL);
 }
 
 void quit() {

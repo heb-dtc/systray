@@ -85,6 +85,10 @@ func showMenuItem(item *MenuItem) {
 	)
 }
 
+func resetMenu() {
+    C.reset_menu()
+}
+
 //export systray_ready
 func systray_ready() {
 	systrayReady()
