@@ -37,6 +37,3 @@ func (item *MenuItem) SetTemplateIcon(templateIconBytes []byte, regularIconBytes
 	C.setMenuItemIcon(cstr, (C.int)(len(templateIconBytes)), C.int(item.id), true)
 }
 
-func resetMenu() {
-    C.reset_menu()
-}
