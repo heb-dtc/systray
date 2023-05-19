@@ -624,14 +624,15 @@ func (t *winTray) resetMenuItem(menuItemId uint32) error {
 	t.muMenus.RLock()
 	menu := uintptr(t.menus[menuItemId])
 	t.muMenus.RUnlock()
-	res, err := pGetMenuItemCount.Call(
+	res, _, err := pGetMenuItemCount.Call(
 		menu,
 	)
-	if res == -1 && err.(syscall.Errno) != ERROR_SUCCESS {
+	err.(syscall.Errno) != ERROR_SUCCESS {
 		return err
 	}
-            
-    for i := 0; i < res; i++ {
+        
+    count := int16(res)
+    for i := 0; i < count; i++ {
 	    res, _, err := pRemoveMenu.Call(
 		    menu,
 		    uintptr(i),
