@@ -193,7 +193,7 @@ NSMenuItem *find_menu_item(NSMenu *ourMenu, NSNumber *menuId) {
 {
     NSMenuItem* menuItem = find_menu_item(menu, menuId);
     if (menuItem != NULL) {
-        [menuItem removeAllItems];
+        //[menuItem removeAllItems];
     }
 }
 
