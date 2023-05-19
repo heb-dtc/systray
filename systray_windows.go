@@ -61,6 +61,7 @@ var (
 	pTranslateMessage      = u32.NewProc("TranslateMessage")
 	pUnregisterClass       = u32.NewProc("UnregisterClassW")
 	pUpdateWindow          = u32.NewProc("UpdateWindow")
+    pGetMenuItemCount      = u32.NewProc("GetMenuItemCount")
 )
 
 // Contains window class information.
@@ -616,8 +617,36 @@ func (t *winTray) addSeparatorMenuItem(menuItemId, parentId uint32) error {
 	return nil
 }
 
-func resetMenu() {
-	wt.createMenu()
+func (t *winTray) resetMenuItem(menuItemId) error {
+	if !wt.isReady() {
+		return ErrTrayNotReadyYet
+	}
+
+	const MF_BYCOMMAND = 0x00000000
+	const ERROR_SUCCESS syscall.Errno = 0
+
+	t.muMenus.RLock()
+	menu := uintptr(t.menus[menuItemId])
+	t.muMenus.RUnlock()
+	res, _, err := pGetMenuItemCount.Call(
+		menu
+	)
+	if res == -1 && err.(syscall.Errno) != ERROR_SUCCESS {
+		return err
+	}
+            
+    for i := 0; i < res; i++ {
+	    res, _, err := pRemoveMenu.Call(
+		    menu,
+		    uintptr(i),
+		    MF_BYCOMMAND,
+	    )
+	    if res == 0 && err.(syscall.Errno) != ERROR_SUCCESS {
+		    return err
+	    }
+    }
+
+	return nil
 }
 
 func (t *winTray) hideMenuItem(menuItemId, parentId uint32) error {
@@ -939,6 +968,18 @@ func hideMenuItem(item *MenuItem) {
 	err := wt.hideMenuItem(uint32(item.id), item.parentId())
 	if err != nil {
 		log.Errorf("Unable to hideMenuItem: %v", err)
+		return
+	}
+}
+
+func resetMenu() {
+	wt.createMenu()
+}
+
+func resetMenuItem(item *MenuItem) {
+	err := wt.resetMenuItem(uint32(item.id))
+	if err != nil {
+		log.Errorf("Unable to resetMenuItem: %v", err)
 		return
 	}
 }
