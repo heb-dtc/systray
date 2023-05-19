@@ -617,18 +617,14 @@ func (t *winTray) addSeparatorMenuItem(menuItemId, parentId uint32) error {
 	return nil
 }
 
-func (t *winTray) resetMenuItem(menuItemId) error {
-	if !wt.isReady() {
-		return ErrTrayNotReadyYet
-	}
-
+func (t *winTray) resetMenuItem(menuItemId uint32) error {
 	const MF_BYCOMMAND = 0x00000000
 	const ERROR_SUCCESS syscall.Errno = 0
 
 	t.muMenus.RLock()
 	menu := uintptr(t.menus[menuItemId])
 	t.muMenus.RUnlock()
-	res, _, err := pGetMenuItemCount.Call(
+	res, err := pGetMenuItemCount.Call(
 		menu,
 	)
 	if res == -1 && err.(syscall.Errno) != ERROR_SUCCESS {
