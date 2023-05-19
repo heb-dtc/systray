@@ -92,9 +92,9 @@ func resetMenu() {
 }
 
 func resetMenuItem(item *MenuItem) {
-    C.reset_menu_item(
-        C.int(item.id),
-    )
+	C.reset_menu_item(
+		C.int(item.id),
+	)
 }
 
 //export systray_ready

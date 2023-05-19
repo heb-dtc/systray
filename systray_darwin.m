@@ -183,10 +183,18 @@ NSMenuItem *find_menu_item(NSMenu *ourMenu, NSNumber *menuId) {
   }
 }
 
-- (void) reset_menu()
+- (void) reset_menu
 {
     NSMenu *theMenu = self->menu;
     [NSApp removeAllItems];
+}
+
+- (void) reset_menu_item:(NSNumber*) menuId
+{
+    NSMenuItem* menuItem = find_menu_item(menu, menuId);
+    if (menuItem != NULL) {
+        [menuItem removeAllItems];
+    }
 }
 
 - (void) setMenuItemIcon:(NSArray*)imageAndMenuId {
@@ -286,6 +294,11 @@ void add_separator(int menuId) {
 
 void reset_menu() {
   runInMainThread(@selector(reset_menu), nil);
+}
+
+void reset_menu_item(int menuId) {
+  NSNumber *mId = [NSNumber numberWithInt:menuId];
+  runInMainThread(@selector(reset_menu_item:), (id)mId);
 }
 
 void hide_menu_item(int menuId) {
