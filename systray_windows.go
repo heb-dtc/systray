@@ -627,7 +627,7 @@ func (t *winTray) resetMenuItem(menuItemId uint32) error {
 	res, _, err := pGetMenuItemCount.Call(
 		menu,
 	)
-	err.(syscall.Errno) != ERROR_SUCCESS {
+	if err.(syscall.Errno) != ERROR_SUCCESS {
 		return err
 	}
         
