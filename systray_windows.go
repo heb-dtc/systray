@@ -629,7 +629,7 @@ func (t *winTray) resetMenuItem(menuItemId) error {
 	menu := uintptr(t.menus[menuItemId])
 	t.muMenus.RUnlock()
 	res, _, err := pGetMenuItemCount.Call(
-		menu
+		menu,
 	)
 	if res == -1 && err.(syscall.Errno) != ERROR_SUCCESS {
 		return err
