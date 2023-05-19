@@ -631,7 +631,8 @@ func (t *winTray) resetMenuItem(menuItemId uint32) error {
 		return err
 	}
         
-    for i := 0; i < res; i++ {
+    count := int16(res)
+    for i := 0; i < int(count); i++ {
 	    res, _, err := pRemoveMenu.Call(
 		    menu,
 		    uintptr(i),
