@@ -185,15 +185,14 @@ NSMenuItem *find_menu_item(NSMenu *ourMenu, NSNumber *menuId) {
 
 - (void) reset_menu
 {
-    NSMenu *theMenu = self->menu;
-    [NSApp removeAllItems];
+    [self->menu removeAllItems];
 }
 
 - (void) reset_menu_item:(NSNumber*) menuId
 {
     NSMenuItem* menuItem = find_menu_item(menu, menuId);
     if (menuItem != NULL) {
-        //[menuItem removeAllItems];
+        [menuItem.menu removeAllItems]
     }
 }
 
