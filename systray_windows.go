@@ -628,10 +628,12 @@ func (t *winTray) resetMenuItem(menuItemId uint32) error {
 		menu,
 	)
 	if err.(syscall.Errno) != ERROR_SUCCESS {
+        log.Errorf("failed to get menu item count %v", err)
 		return err
 	}
-        
+
     count := int16(res)
+    log.Errorf("menu has %d items", count)
     for i := 0; i < int(count); i++ {
 	    res, _, err := pRemoveMenu.Call(
 		    menu,
@@ -639,6 +641,7 @@ func (t *winTray) resetMenuItem(menuItemId uint32) error {
 		    MF_BYCOMMAND,
 	    )
 	    if res == 0 && err.(syscall.Errno) != ERROR_SUCCESS {
+            log.Errorf("failed to remove menu item %v", err)
 		    return err
 	    }
     }
